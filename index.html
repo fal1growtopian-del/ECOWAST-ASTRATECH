@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#928cc3">
+    <meta name="description" content="ECOWAST Dual-Tank Water Management Dashboard">
+    <title>ECOWAST | Water Management System</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="top-header">
+        <div class="brand">
+            <div class="brand-mark" aria-hidden="true">EW</div>
+            <div class="brand-text">
+                <div class="eyebrow">WATER MANAGEMENT / CONTROL INTERFACE</div>
+                <h1>ECOWAST <span>Dual-Tank System</span></h1>
+                <p>Filtration · Recirculation · Irrigation</p>
+            </div>
+        </div>
+        <div class="header-meta">
+            <div class="system-status"><span class="status-dot"></span><span id="systemStatus">SIMULATION ONLINE</span></div>
+            <div class="clock" id="clock">--:--:--</div>
+        </div>
+    </header>
+
+
+    <section class="welcome-bar" aria-label="Welcome and operator profile">
+        <div class="settings-wrap">
+            <button class="settings-toggle" id="settingsToggle" type="button" aria-label="Buka pengaturan" aria-expanded="false" aria-controls="settingsPanel">
+                <span></span><span></span><span></span>
+            </button>
+            <form class="settings-panel" id="settingsPanel" hidden>
+                <label for="usernameInput">Username</label>
+                <input id="usernameInput" name="username" type="text" maxlength="32" autocomplete="nickname" placeholder="System Operator" required>
+                <button type="submit">Simpan</button>
+            </form>
+        </div>
+        <div class="welcome-copy">
+            <span class="welcome-kicker">ECOWAST / OPERATOR DESK</span>
+            <h2>Hi there, <span>Welcome back.</span></h2>
+            <p>Your water treatment system overview is ready.</p>
+            <div class="welcome-date"><span class="date-mark"></span><span id="welcomeDate">Loading date...</span></div>
+        </div>
+        <div class="profile-actions">
+        <div class="profile-card">
+            <div class="profile-avatar" aria-hidden="true">
+                <svg viewBox="0 0 100 100" role="img">
+                    <circle cx="50" cy="50" r="48" fill="#eaf0ff"/>
+                    <path d="M15 88c4-19 17-29 35-29s31 10 35 29" fill="#6f62b5"/>
+                    <path d="M34 62l16 15 16-15 8 26H26z" fill="#ffffff"/>
+                    <path d="M32 38c0-18 8-27 19-27 13 0 20 10 20 27v12c0 15-10 25-21 25S30 65 30 50z" fill="#f2bd91"/>
+                    <path d="M29 42c-3-19 7-32 23-32 15 0 24 12 21 32l-6-8c-9 1-19-3-25-9-2 7-6 12-13 17z" fill="#343044"/>
+                    <path d="M38 48h5m14 0h5" stroke="#37334b" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M44 61c4 4 9 4 13 0" fill="none" stroke="#a65f57" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M24 91c3-14 12-22 26-22s23 8 26 22" fill="#ffffff"/>
+                    <path d="M40 71l10 10 10-10" fill="none" stroke="#928cc3" stroke-width="4"/>
+                </svg>
+            </div>
+            <div class="profile-details">
+                <span class="profile-label">SIGNED IN AS</span>
+                <strong id="operatorUsername">System Operator</strong>
+                <span class="profile-role">ECOWAST Project Team</span>
+            </div>
+            <span class="profile-status" title="Profile active"></span>
+        </div>
+        </div>
+    </section>
+
+    <main class="dashboard">
+        <aside class="panel sensor-panel">
+            <div class="section-heading">
+                <div>
+                    <div class="eyebrow">INPUT / 01</div>
+                    <h2>Sensor readings</h2>
+                </div>
+                <span class="live-label">SIMULATED</span>
+            </div>
+
+            <div class="sensor-carousel" id="sensorCarousel">
+                <div class="sensor-track" id="sensorTrack">
+            <div class="sensor-item">
+                <div class="sensor-heading">
+                    <label for="ph">pH sensor <small>pH4502C</small></label>
+                    <output id="phValue" class="sensor-value">7.2</output>
+                </div>
+                <input type="range" id="ph" min="0" max="14" step="0.1" value="7.2">
+                <canvas class="sensor-chart" id="phChart" role="img" aria-label="Grafik perubahan sensor pH"></canvas>
+                <div class="range-label"><span>ACIDIC · 0</span><span>NEUTRAL · 7</span><span>ALKALINE · 14</span></div>
+            </div>
+
+            <div class="sensor-item">
+                <div class="sensor-heading">
+                    <label for="turbidity">Turbidity <small>Water clarity</small></label>
+                    <output id="turbidityValue" class="sensor-value">2.1 NTU</output>
+                </div>
+                <input type="range" id="turbidity" min="0" max="100" step="0.1" value="2.1">
+                <canvas class="sensor-chart" id="turbidityChart" role="img" aria-label="Grafik perubahan turbidity"></canvas>
+                <div class="range-label"><span>CLEAR · 0</span><span>LIMIT · 5 NTU</span><span>TURBID · 100</span></div>
+            </div>
+
+            <div class="sensor-item">
+                <div class="sensor-heading">
+                    <label for="moisture">Soil moisture <small>Irrigation input</small></label>
+                    <output id="moistureValue" class="sensor-value">41%</output>
+                </div>
+                <input type="range" id="moisture" min="0" max="100" value="41">
+                <canvas class="sensor-chart" id="moistureChart" role="img" aria-label="Grafik perubahan kelembapan tanah"></canvas>
+                <div class="range-label"><span>DRY · 0%</span><span>WET · 100%</span></div>
+            </div>
+
+            <div class="sensor-item">
+                <div class="sensor-heading">
+                    <label for="tank1Input">Raw water level <small>Tank 01</small></label>
+                    <output id="tank1Value" class="sensor-value">57.4%</output>
+                </div>
+                <input type="range" id="tank1Input" min="0" max="100" step="0.1" value="57.4">
+                <canvas class="sensor-chart" id="tank1Chart" role="img" aria-label="Grafik perubahan level air baku"></canvas>
+                <div class="range-label"><span>EMPTY · 0%</span><span>FULL · 100%</span></div>
+            </div>
+
+            <div class="sensor-item">
+                <div class="sensor-heading">
+                    <label for="tank2Input">Clean water level <small>Tank 02</small></label>
+                    <output id="tank2Value" class="sensor-value">56.1%</output>
+                </div>
+                <input type="range" id="tank2Input" min="0" max="100" step="0.1" value="56.1">
+                <canvas class="sensor-chart" id="tank2Chart" role="img" aria-label="Grafik perubahan level air bersih"></canvas>
+                <div class="range-label"><span>EMPTY · 0%</span><span>HIGH LEVEL · 95%</span></div>
+            </div>
+
+                </div>
+                <div class="sensor-carousel-controls">
+                    <button type="button" id="sensorPrevious" aria-label="Sensor sebelumnya">&#8249;</button>
+                    <span id="sensorPage" aria-live="polite">1 / 5</span>
+                    <button type="button" id="sensorNext" aria-label="Sensor berikutnya">&#8250;</button>
+                </div>
+            </div>
+
+            <section class="evaluation" aria-live="polite">
+                <div class="eyebrow">SYSTEM ASSESSMENT</div>
+                <div class="evaluation-row">
+                    <span>Raw water quality</span>
+                    <strong id="waterQuality" class="state-good">WITHIN TARGET</strong>
+                </div>
+                <div class="evaluation-row">
+                    <span>Process mode</span>
+                    <strong id="flowMode">TRANSFER</strong>
+                </div>
+                <div class="evaluation-row">
+                    <span>Tank 02 capacity</span>
+                    <strong id="capacityStatus">AVAILABLE</strong>
+                </div>
+            </section>
+        </aside>
+
+        <div class="right-content">
+            <section class="lcd-panel">
+                <div class="lcd-heading">
+                    <div><span class="lcd-indicator"></span> CONTROLLER DISPLAY <b>20 × 4 / I2C 0x27</b></div>
+                    <span>ESP32 · GPIO 21 / 22</span>
+                </div>
+                <div class="lcd-screen" aria-label="LCD 20 by 4 simulation">
+                    <p id="lcd1">PH: 7.2  TURB: 2.1 NTU</p>
+                    <p id="lcd2">RAW: 57%  CLEAN: 56%</p>
+                    <p id="lcd3">MODE: PASS / TRANSFER</p>
+                    <p id="lcd4">P1: OFF  P2: ON  P3: OFF</p>
+                </div>
+            </section>
+
+            <section class="panel tank-panel">
+                <div class="section-heading">
+                    <div>
+                        <div class="eyebrow">PROCESS / 02</div>
+                        <h2>Dual-tank process overview</h2>
+                    </div>
+                    <span class="transfer-status" id="transferStatus">TRANSFER ENABLED</span>
+                </div>
+
+                <div class="tank-container">
+                    <article class="tank-card">
+                        <div class="tank-title">
+                            <div><span class="tank-index">01</span><h3>Raw water / filter</h3></div>
+                            <span id="tank1Label" class="tank-reading">57.4%</span>
+                        </div>
+                        <div class="tank-shell raw-shell">
+                            <div class="tank-grid"></div>
+                            <div class="water raw-water" id="rawWater"></div>
+                            <span class="tank-percentage" id="rawPercentage">57.4%</span>
+                            <span class="tank-unit">LEVEL</span>
+                        </div>
+                        <div class="tank-info">
+                            <span>INSTRUMENTS</span><strong>pH4502C / TURBIDITY</strong>
+                            <span>WATER STATUS</span><strong id="rawStatus">Within target</strong>
+                        </div>
+                    </article>
+
+                    <div class="transfer-column">
+                        <span class="transfer-line"></span>
+                        <span class="transfer-icon" aria-hidden="true">›</span>
+                        <span class="transfer-caption">FILTER<br>TRANSFER</span>
+                    </div>
+
+                    <article class="tank-card">
+                        <div class="tank-title">
+                            <div><span class="tank-index clean-index">02</span><h3>Clean water</h3></div>
+                            <span id="tank2Label" class="tank-reading">56.1%</span>
+                        </div>
+                        <div class="tank-shell clean-shell">
+                            <div class="tank-grid"></div>
+                            <div class="water clean-water" id="cleanWater"></div>
+                            <span class="tank-percentage" id="cleanPercentage">56.1%</span>
+                            <span class="tank-unit">LEVEL</span>
+                            <div class="safety-line"><span>HIGH LEVEL · 95%</span></div>
+                        </div>
+                        <div class="tank-info">
+                            <span>INSTRUMENTS</span><strong>WATER LEVEL SENSOR</strong>
+                            <span>TANK STATUS</span><strong id="cleanStatus">Available capacity</strong>
+                        </div>
+                    </article>
+                </div>
+                <div class="process-note">
+                    <span class="note-mark"></span>
+                    <span>Illustrative process view. Water movement is not physically simulated.</span>
+                </div>
+            </section>
+
+            <section class="pump-section">
+                <div class="section-heading">
+                    <div>
+                        <div class="eyebrow">ACTUATORS / 03</div>
+                        <h2>Pump control</h2>
+                    </div>
+                    <span class="manual-label">MANUAL SIMULATION</span>
+                </div>
+
+                <div class="pump-container">
+                    <article class="pump-card">
+                        <div class="pump-symbol">P1</div>
+                        <div class="pump-info">
+                            <h3>Re-filtration</h3>
+                            <p>Recirculation loop</p>
+                        </div>
+                        <button id="pump1" class="pump-button" type="button" aria-pressed="false">OFF</button>
+                    </article>
+
+                    <article class="pump-card">
+                        <div class="pump-symbol">P2</div>
+                        <div class="pump-info">
+                            <h3>Transfer</h3>
+                            <p>Raw to clean tank</p>
+                        </div>
+                        <button id="pump2" class="pump-button active" type="button" aria-pressed="true">ON</button>
+                    </article>
+
+                    <article class="pump-card">
+                        <div class="pump-symbol">P3</div>
+                        <div class="pump-info">
+                            <h3>Irrigation</h3>
+                            <p>Soil moisture demand</p>
+                        </div>
+                        <button id="pump3" class="pump-button" type="button" aria-pressed="false">OFF</button>
+                    </article>
+                </div>
+                <p class="control-disclaimer">Control buttons are demonstration controls only. They do not operate physical pumps.</p>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <span>ECOWAST / DUAL-TANK SYSTEM</span>
+        <span>PROTOTYPE INTERFACE · V1.0</span>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
